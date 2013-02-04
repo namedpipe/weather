@@ -1,0 +1,121 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: 'Raleway', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+#current-temp {
+  padding-bottom: 20px;
+  padding-left: 10px;
+}
+#city {
+  color: #676767;
+}
+#current-temp #temp-units{
+  font-size: 0.4em;
+  vertical-align: text-top;
+  margin-top: 5px;
+}
+.hero-unit {
+  border-radius: 0;
+  box-shadow: 0px 3px 3px #acacac;
+  -webkit-box-shadow: 0px 3px 3px #acacac;
+  margin-top: 4px;
+}
+
+svg {display: block; width: 99%; margin: 0 auto;}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 4.5px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis text {
+  font-size: 1.1em;
+}
+
+rect {
+  fill: #ddd;
+}
+
+.grid line {
+  stroke: #fff;
+}
+
+.grid line.minor {
+  stroke-width: .5px;
+}
+
+.grid text {
+  display: none;
+}
+
+.axis line {
+  stroke: #000;
+}
+
+.grid path {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .hero-unit {
+    padding: 5px;
+  }
+  svg {
+    height: 250px;
+  }
+}
+
