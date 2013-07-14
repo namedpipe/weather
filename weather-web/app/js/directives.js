@@ -10,8 +10,8 @@ directivesModule.directive('city', ['city', function(city) {
 
 directivesModule.directive('weatherGraph', function () {
   var margin = {top: 25, right: 10, bottom: 5, left: 30};
-  var width = 760 - margin.left - margin.right,
-    height = 550 - margin.top - margin.bottom;
+  var width = 660 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
   var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S").parse;
 
   return {
@@ -29,14 +29,22 @@ directivesModule.directive('weatherGraph', function () {
         .y(function(d) { return y(d.temperature); })
         .interpolate("bundle")
         .tension(0.9);
-      //line.interpolate("linear");
-
 
       var svg = d3.select(element[0]).append("svg")
         .attr("preserveAspectRatio", "xMidYMin")
-        .attr("viewBox", "0 0 760 550")
+        .attr("viewBox", "0 0 660 500")
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      scope.$watch('gotdata', function (newVal, oldVal) {
+        console.log('New gotdata value ' + newVal);
+        if (!newVal) {
+          return;
+        }
+        if (newVal == "false") {
+          svg.attr("viewBox", "0 0 60 50");
+        }
+      });
 
       scope.$watch('val', function (newVal, oldVal) {
         svg.selectAll('*').remove();
@@ -53,13 +61,13 @@ directivesModule.directive('weatherGraph', function () {
         y.domain(d3.extent(data, function(d) { return d.temperature; }));
 
         svg.append("g")
-            .attr("class", "x grid")
-            .attr("transform", "translate(0," + height + ")")
-           .call(d3.svg.axis().scale(x).ticks(6).tickSize(-height));
+          .attr("class", "x grid")
+          .attr("transform", "translate(0," + height + ")")
+         .call(d3.svg.axis().scale(x).ticks(6).tickSize(-height));
 
         svg.append("g")
-            .attr("class", "x axis")
-            .call(xAxis);
+          .attr("class", "x axis")
+          .call(xAxis);
 
         svg.append("g")
             .attr("class", "y axis")
@@ -73,9 +81,9 @@ directivesModule.directive('weatherGraph', function () {
             .text("Temperature (F)");
 
         svg.append("path")
-            .datum(data)
-            .attr("class", "line")
-            .attr("d", line);
+          .datum(data)
+          .attr("class", "line")
+          .attr("d", line);
       });
     }
   }

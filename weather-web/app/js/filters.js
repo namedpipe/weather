@@ -8,3 +8,9 @@ angular.module('weatherApp.filters', []).
       return String(text).replace(/\%VERSION\%/mg, version);
     }
   }]);
+
+angular.module('weatherApp.filters').filter('fromNow', function() {
+  return function(date) {
+    return moment(date).fromNow();
+  }
+});

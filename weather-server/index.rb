@@ -1,8 +1,12 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+require 'rubygems' # for ruby 1.8
 require 'sinatra'
 require 'json'
 require 'open-uri'
 require 'nokogiri'
 require 'date'
+require 'time'
 require 'redis'
 
 before do
@@ -16,14 +20,18 @@ before do
 end
 
 get '/:lat/:long/test' do
+  start_date = Time.now.xmlschema
+  end_date = (Time.now + (2*24*60*60)).xmlschema
   headers["Access-Control-Allow-Origin"] = "*"
-  temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=2004-01-01T00:00:00&end=2013-04-20T00:00:00&temp=temp"
+  temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
   temp_forecast_url
 end
 
 get '/:lat/:long/forecast.json' do
+  start_date = Time.now.xmlschema
+  end_date = (Time.now + (2*24*60*60)).xmlschema
   headers["Access-Control-Allow-Origin"] = "*"
-  temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=2004-01-01T00:00:00&end=2013-04-20T00:00:00&temp=temp"
+  temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
   doc = Nokogiri::HTML(open(temp_forecast_url))
   location = doc.xpath('//data/location/point')
   lat = location.attribute("latitude").value

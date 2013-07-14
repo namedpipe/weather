@@ -10,3 +10,4 @@ servicesModule.value('version', '0.1');
 servicesModule.value('city', 'Des Moines');
 servicesModule.value('lat', '41.58');
 servicesModule.value('lon', '-93.62');
+servicesModule.value('server', 'http://localhost:4567');
