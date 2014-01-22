@@ -1,6 +1,7 @@
 'use strict';
 
 var directivesModule = angular.module('weatherApp.directives', []);
+var data;
 
 directivesModule.directive('city', ['city', function(city) {
     return function(scope, elm, attrs) {
@@ -37,7 +38,6 @@ directivesModule.directive('weatherGraph', function () {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       scope.$watch('gotdata', function (newVal, oldVal) {
-        console.log('New gotdata value ' + newVal);
         if (!newVal) {
           return;
         }
