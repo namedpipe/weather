@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
-require 'rubygems' # for ruby 1.8
+
 require 'sinatra'
 require 'json'
 require 'open-uri'
@@ -8,58 +8,116 @@ require 'nokogiri'
 require 'date'
 require 'time'
 require 'redis'
+require 'ziptastic'
+require 'kdtree'
 
 set :bind, '0.0.0.0'
 
-before do
-  if request.request_method == 'OPTIONS'
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET"
-    response.headers['Access-Control-Allow-Headers'] = 'origin, x-requested-with, accept'
+class WeatherApp < Sinatra::Base
+  NWS_ENDPOINT = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php"
+  NWS_STATION_LIST = "http://w1.weather.gov/xml/current_obs/index.xml"
+  NWS_CURRENT_OBSERVATION = "http://w1.weather.gov/xml/current_obs/"
 
-    halt 200
+  doc = Nokogiri::XML(open(NWS_STATION_LIST))
+  points = []
+  stations = []
+  doc.xpath('//wx_station_index/station').each do |station|
+    station_id = station.xpath('station_id').first.content
+    stations << station_id
+    latitude = station.xpath('latitude').first.content
+    longitude = station.xpath('longitude').first.content
+    point = [latitude.to_f, longitude.to_f, stations.index(station_id)]
+    points << point
   end
-end
+  kd = Kdtree.new(points)
+  set :kd, kd
+  set :stations, stations
 
-get '/:lat/:long/test' do
-  start_date = Time.now.xmlschema
-  end_date = (Time.now + (2*24*60*60)).xmlschema
-  headers["Access-Control-Allow-Origin"] = "*"
-  temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
-  temp_forecast_url
-end
+  before do
+    if request.request_method == 'OPTIONS'
+      response.headers["Access-Control-Allow-Origin"] = "*"
+      response.headers["Access-Control-Allow-Methods"] = "GET"
+      response.headers['Access-Control-Allow-Headers'] = 'origin, x-requested-with, accept'
 
-get '/:lat/:long/forecast.json' do
-  start_date = Time.now.xmlschema
-  end_date = (Time.now + (2*24*60*60)).xmlschema
-  headers["Access-Control-Allow-Origin"] = "*"
-  temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
-  doc = Nokogiri::XML(open(temp_forecast_url))
-  location = doc.xpath('//data/location/point')
-  lat = location.attribute("latitude").value
-  long = location.attribute("longitude").value
-
-  times = []
-
-  doc.xpath('//data/time-layout').children.each do |time_element|
-    if time_element.name == "start-valid-time"
-      temp_time = DateTime.parse(time_element.children.first.to_s)
-      times << temp_time.strftime("%Y-%m-%dT%H:%M:%S")
+      halt 200
     end
   end
 
-  temps = []
-  i = 0
-  doc.xpath('//data/parameters/temperature').children.each do |temp_element|
-    if temp_element.name == "value"
-      temps << [times[i], temp_element.children.first.to_s.to_i]
-      i += 1
-    end
+  get '/:zip/city.json' do
+    geolocation_url = "#{NWS_ENDPOINT}?listZipCodeList=#{params[:zip]}"
+    doc = Nokogiri::XML(open(geolocation_url))
+
+    latitude, longitude = doc.xpath('//latlonlist').first.children.first.content.split(",")
+
+    results = Ziptastic.search(params[:zip])
+
+    city = results.first
+    city[:longitude] = longitude
+    city[:latitude] = latitude
+    
+    content_type :json
+    city.to_json
   end
 
-  json_data = temps.to_json
+  get '/:lat/:long/station.json' do
+    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
+    station = settings.stations[nearest]
+    current_obs_url = "http://weather.gov/xml/current_obs/#{station}.xml"
+    content_type :json
+    {station: station, current_observation_xml: current_obs_url}.to_json
+  end
 
-	content_type :json
-  json_data
+  get '/:lat/:long/current.json' do
+    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
+    station = settings.stations[nearest]
+    current_obs_url = "http://weather.gov/xml/current_obs/#{station}.xml"
+    doc = Nokogiri::XML(open(current_obs_url))
+    temp = doc.xpath('//temp_f').first.content
+    content_type :json
+    {station: station, current_temperature_f: temp}.to_json
+  end
+
+  get '/:lat/:long/test' do
+    start_date = Time.now.xmlschema
+    end_date = (Time.now + (2*24*60*60)).xmlschema
+    temp_forecast_url = "#{NWS_ENDPOINT}?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
+    temp_forecast_url
+  end
+
+  get '/:lat/:long/forecast.json' do
+    start_date = Time.now.xmlschema
+    end_date = (Time.now + (2*24*60*60)).xmlschema
+    headers["Access-Control-Allow-Origin"] = "*"
+    temp_forecast_url = "#{NWS_ENDPOINT}?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
+    forecast_doc = Nokogiri::XML(open(temp_forecast_url))
+    location = forecast_doc.xpath('//data/location/point')
+    lat = location.attribute("latitude").value
+    long = location.attribute("longitude").value
+
+    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
+    station = settings.stations[nearest]
+    current_obs_url = "http://weather.gov/xml/current_obs/#{station}.xml"
+    current_obs_doc = Nokogiri::XML(open(current_obs_url))
+    current_temp = current_obs_doc.xpath('//temp_f').first.content
+
+    times = []
+    forecast_doc.xpath('//data/time-layout').children.each do |time_element|
+      if time_element.name == "start-valid-time"
+        temp_time = DateTime.parse(time_element.children.first.to_s)
+        times << temp_time.strftime("%Y-%m-%dT%H:%M:%S")
+      end
+    end
+
+    temps = []
+    temps << [Time.now.strftime("%Y-%m-%dT%H:%M:%S"), current_temp.to_i]
+    i = 0
+    forecast_doc.xpath('//data/parameters/temperature').children.each do |temp_element|
+      if temp_element.name == "value"
+        temps << [times[i], temp_element.children.first.to_s.to_i]
+        i += 1
+      end
+    end
+    content_type :json
+    temps.to_json
+  end
 end
-

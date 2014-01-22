@@ -2,13 +2,12 @@
 
 /* Controllers */
 
-
-function MyCtrl1($scope, $http){
+function HomeController($scope, $http){
   var lat = '41.58';
   var lon = '-93.62';
 	$http(
     {method: 'GET', 
-    url: 'http://192.34.61.91:4567/' + lat + '/' + lon + '/forecast.json'}).
+    url: 'http://weather.namedpipe.net:4567/' + lat + '/' + lon + '/forecast.json'}).
   success(function(data, status, headers, config) {
   	$scope.weatherData = data;
     var d = new Date();
@@ -20,8 +19,23 @@ function MyCtrl1($scope, $http){
     $scope.gotdata = "false";
   });
 }
-MyCtrl1.$inject = ['$scope', '$http'];
+HomeController.$inject = ['$scope', '$http', 'city'];
 
-function MyCtrl2() {
+function LocationController($scope, $http){
+  var lat = '41.58';
+  var lon = '-93.62';
+  $http(
+    {method: 'GET', 
+    url: 'http://weather.namedpipe.net:4567/' + lat + '/' + lon + '/forecast.json'}).
+  success(function(data, status, headers, config) {
+    $scope.weatherData = data;
+    var d = new Date();
+    $scope.dataStatus = "Refreshed " + moment(d).fromNow();
+    $scope.gotdata = "true";
+  }).
+  error(function(data, status, headers, config) {
+    $scope.dataStatus = "Problem accessing the weather data";
+    $scope.gotdata = "false";
+  });
 }
-MyCtrl2.$inject = [];
+LocationController.$inject = ['$scope', '$http'];
