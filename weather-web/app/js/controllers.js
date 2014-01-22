@@ -3,12 +3,12 @@
 /* Controllers */
 
 
-function MyCtrl1($scope, $http){
+function HomeController($scope, $http){
   var lat = '41.58';
   var lon = '-93.62';
 	$http(
     {method: 'GET', 
-    url: 'http://weather.namedpipe.net/' + lat + '/' + lon + '/forecast.json'}).
+    url: 'http://weather.namedpipe.net:4567/' + lat + '/' + lon + '/forecast.json'}).
   success(function(data, status, headers, config) {
   	$scope.weatherData = data;
     var d = new Date();
@@ -20,8 +20,4 @@ function MyCtrl1($scope, $http){
     $scope.gotdata = "false";
   });
 }
-MyCtrl1.$inject = ['$scope', '$http'];
-
-function MyCtrl2() {
-}
-MyCtrl2.$inject = [];
+HomeController.$inject = ['$scope', '$http'];
