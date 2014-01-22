@@ -8,7 +8,7 @@ function MyCtrl1($scope, $http){
   var lon = '-93.62';
 	$http(
     {method: 'GET', 
-    url: 'http://weather.namedpipe.net/' + lat + '/' + lon + '/forecast.json'}).
+    url: 'http://192.34.61.91:4567/' + lat + '/' + lon + '/forecast.json'}).
   success(function(data, status, headers, config) {
   	$scope.weatherData = data;
     var d = new Date();

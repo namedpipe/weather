@@ -9,6 +9,8 @@ require 'date'
 require 'time'
 require 'redis'
 
+set :bind, '0.0.0.0'
+
 before do
   if request.request_method == 'OPTIONS'
     response.headers["Access-Control-Allow-Origin"] = "*"
@@ -32,7 +34,7 @@ get '/:lat/:long/forecast.json' do
   end_date = (Time.now + (2*24*60*60)).xmlschema
   headers["Access-Control-Allow-Origin"] = "*"
   temp_forecast_url = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
-  doc = Nokogiri::HTML(open(temp_forecast_url))
+  doc = Nokogiri::XML(open(temp_forecast_url))
   location = doc.xpath('//data/location/point')
   lat = location.attribute("latitude").value
   long = location.attribute("longitude").value
