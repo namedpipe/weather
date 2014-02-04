@@ -55,7 +55,7 @@ directivesModule.directive('weatherGraph', function () {
           return {
             date: parseDate(d[0]),
             temperature: d[1]
-          };   
+          };
         });
         x.domain(d3.extent(data, function(d) { return d.date; }));
         y.domain(d3.extent(data, function(d) { return d.temperature; }));

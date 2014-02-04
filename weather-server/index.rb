@@ -54,7 +54,7 @@ class WeatherApp < Sinatra::Base
     city = results.first
     city[:longitude] = longitude
     city[:latitude] = latitude
-    
+
     content_type :json
     city.to_json
   end
