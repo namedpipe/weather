@@ -1,5 +1,5 @@
 <button class="btn btn-outline-inverse btn-lg" data-toggle="modal" data-target="#selectcity">
-<h2 city id="city"><city></city></h2>
+<h2 city id="city">{{cityName}}</h2>
 </button>
 
 <div class="modal fade" id="selectcity" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -29,3 +29,5 @@
 <h1 current-temp id="current-temp">{{weatherData[0][1]}}<span id="temp-units">F</span></h1>
 <weather-graph val="weatherData" gotdata="none"></weather-graph>
 <p id="status">{{dataStatus}}</p>
+<span my-current-time="format"></span>
+<my-current-time></my-current-time>

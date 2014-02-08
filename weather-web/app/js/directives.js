@@ -1,11 +1,19 @@
 'use strict';
 
-var directivesModule = angular.module('weatherApp.directives', []);
 var data;
+var directivesModule = angular.module('weatherApp.directives', []);
 
 directivesModule.directive('city', ['city', function(city) {
     return function(scope, elm, attrs) {
       elm.text(city);
+      scope.$watch('gotdata', function (newVal, oldVal) {
+        if (!newVal) {
+          return;
+        }
+        if (newVal == "false") {
+          elm.text(city);
+        }
+      });
     };
 }]);
 
