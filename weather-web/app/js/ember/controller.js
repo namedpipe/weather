@@ -1,4 +1,5 @@
-Weather.WeatherController = Ember.ObjectController.extend({
+App.ForecastController = Ember.ObjectController.extend({
   city: "Des Moines",
-  dataStatus: "Loaded"
+  dataStatus: "Loaded",
+  lastUpdated: new Date()
 });

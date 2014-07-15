@@ -1,0 +1,10 @@
+F, [2013-12-27T09:36:56.625588 #7151] FATAL -- : error adding listener addr=./tmp/sockets/unicorn.sock
+/Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/lib/unicorn/socket_helper.rb:167:in `bind_listen': Don't know how to bind: ./tmp/sockets/unicorn.sock (ArgumentError)
+	from /Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/lib/unicorn/http_server.rb:255:in `listen'
+	from /Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/lib/unicorn/http_server.rb:801:in `block in bind_new_listeners!'
+	from /Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/lib/unicorn/http_server.rb:801:in `each'
+	from /Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/lib/unicorn/http_server.rb:801:in `bind_new_listeners!'
+	from /Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/lib/unicorn/http_server.rb:146:in `start'
+	from /Library/Ruby/Gems/2.0.0/gems/unicorn-4.7.0/bin/unicorn:126:in `<top (required)>'
+	from /usr/bin/unicorn:23:in `load'
+	from /usr/bin/unicorn:23:in `<main>'

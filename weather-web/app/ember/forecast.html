@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8">
   <title>Weather Graph</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="css/bootstrap-responsive.min.css"/>
-  <link rel="stylesheet" href="css/app.css"/>
+  <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/css/bootstrap-responsive.min.css"/>
+  <link rel="stylesheet" href="/css/app.css"/>
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:400,700" media="screen, projection"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="cordova.js"></script>
 </head>
 <body>
 
@@ -17,7 +16,7 @@
         <div>
           <button class="btn btn-outline-inverse btn-lg" data-toggle="modal" data-target="#selectcity">
           <script type="text/x-handlebars">
-          <h2 city id="city">{{city}}</h2>
+          <h2>{{city}}</h2>
           </script>
           </button>
 
@@ -45,11 +44,8 @@
   </div>
 </div>
 
-<h1 current-temp id="current-temp">{{weatherData[0][1]}}<span id="temp-units">F</span></h1>
+<h1 current-temp id="current-temp"><span id="temp-units">F</span></h1>
 <weather-graph val="weatherData" gotdata="none"></weather-graph>
-<script type="text/x-handlebars">
-<p id="status">{{dataStatus}}</p>
-</script>
 <span my-current-time="format"></span>
 <my-current-time></my-current-time>
         </div>
@@ -61,12 +57,9 @@
   <script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-1.0.0.js"></script>
   <script src="http://builds.emberjs.com/tags/v1.3.0/ember.js"></script>
   <script src="http://builds.emberjs.com/tags/v1.0.0-beta.5/ember-data.js"></script>
-  <script src="js/ember/application.js"></script>
-  <script src="js/ember/routes.js"></script>
-  <script src="js/ember/controller.js"></script>
-  <script src="js/ember/models/location.js"></script>
-  <script src="js/d3.min.js"></script>
-  <script src="js/moment.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
+  <script src="/js/ember/application.js"></script>
+  <script src="/js/ember/routes.js"></script>
+  <script src="/js/ember/controller.js"></script>
+  <script src="/js/ember/models/location.js"></script>
 </body>
 </html>

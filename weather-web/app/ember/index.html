@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Weather Graph</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/css/bootstrap-responsive.min.css"/>
+  <link rel="stylesheet" href="/css/app.css"/>
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:400,700" media="screen, projection"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+  <script type="text/x-handlebars" data-template-name="forecast">
+  <div class="container-fluid">
+      <div class="hero-unit">
+        <div>
+          <button class="btn btn-outline-inverse btn-lg" data-toggle="modal" data-target="#selectcity">
+          <h2>{{city}}</h2>
+          </button>
+
+<div class="modal fade" id="selectcity" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Enter a ZIP code</h4>
+      </div>
+      <form ng-submit="processForm()">
+      <div class="modal-body">
+        <div id="name-group" class="form-group">
+          <label>ZIP Code</label>
+          <input type="text" name="zip" class="form-control" placeholder="ZIP" ng-model="formData.zip" size="5"
+             ng-pattern="zip" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success btn btn-primary">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<h1 current-temp id="current-temp"><span id="temp-units">F</span></h1>
+<div class="weather-graph" val="weatherData" gotdata="none">
+</div>
+<script type="text/x-handlebars">
+  <p>Last updated <time></time></p>
+</script>
+        </div>
+      </div>
+  </div>
+  </script>
+
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-1.0.0.js"></script>
+  <script src="http://builds.emberjs.com/tags/v1.3.0/ember.js"></script>
+  <script src="http://builds.emberjs.com/tags/v1.0.0-beta.5/ember-data.js"></script>
+  <script src="/js/d3.min.js"></script>
+  <script src="/js/ember/application.js"></script>
+  <script src="/js/ember/routes.js"></script>
+  <script src="/js/ember/controller.js"></script>
+  <script src="/js/ember/views.js"></script>
+  <script src="/js/ember/models/location.js"></script>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/moment.min.js"></script>
+</body>
+</html>
