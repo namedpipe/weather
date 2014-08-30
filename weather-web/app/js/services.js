@@ -11,3 +11,9 @@ servicesModule.value('city', 'Des Moines');
 servicesModule.value('lat', '41.58');
 servicesModule.value('lon', '-93.62');
 servicesModule.value('server', 'http://weather.namedpipe.net:4567');
+
+$(function(){
+    $('button').click(function() {
+        $(this).toggleClass('active');
+    });
+});
