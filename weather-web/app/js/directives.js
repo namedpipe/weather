@@ -4,7 +4,12 @@ var data;
 var directivesModule = angular.module('weatherApp.directives', []);
 
 directivesModule.directive('city', ['city', function(city) {
-    return function(scope, elm, attrs) {
+    return {
+    restrict: 'E',
+    scope: {
+      val: '='
+    },
+    link: function (scope, elm, attrs) {
       elm.text(city);
       scope.$watch('gotdata', function (newVal, oldVal) {
         if (!newVal) {
@@ -14,7 +19,8 @@ directivesModule.directive('city', ['city', function(city) {
           elm.text(city);
         }
       });
-    };
+    }
+  }
 }]);
 
 directivesModule.directive('weatherGraph', function () {

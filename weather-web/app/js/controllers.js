@@ -19,6 +19,7 @@ function HomeController($scope, $http, city, lat, lon, server){
 
   $scope.formData = {};
   $scope.zip = /^\d\d\d\d\d$/;
+  $scope.cityName = city;
 
   $scope.processForm = function() {
   $http({
@@ -26,17 +27,16 @@ function HomeController($scope, $http, city, lat, lon, server){
         url     : server + '/' + $scope.formData.zip + '/city.json'
     })
         .error(function(data) {
+          $scope.dataStatus = "Problem accessing the weather data";
+          $scope.gotdata = "false";
         })
         .success(function(data) {
           $("#selectcity").modal("hide");
-          $scope.gotdata = "false";
-            console.log(data);
-            city =  data.city;
+          $scope.gotdata = "true";
             lat =  data.latitude;
             lon = data.longitude;
             var forecastURL = server + '/' + lat + '/' + lon + '/forecast.json';
-            $scope.cityName = "CITY";
-            console.log(forecastURL);
+            $scope.cityName = data.city;
               $http(
               {method: 'GET',
                 url: forecastURL}).
