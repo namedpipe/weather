@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+gem 'sinatra'
+gem 'json'
+gem 'nokogiri'
+gem 'redis'
+gem 'ziptastic'
+gem 'kdtree'
+
+gem 'unicorn'

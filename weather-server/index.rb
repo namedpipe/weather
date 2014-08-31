@@ -1,15 +1,9 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-require 'sinatra'
-require 'json'
 require 'open-uri'
-require 'nokogiri'
 require 'date'
 require 'time'
-require 'redis'
-require 'ziptastic'
-require 'kdtree'
 
 set :bind, '0.0.0.0'
 
@@ -29,6 +23,8 @@ class WeatherApp < Sinatra::Base
     point = [latitude.to_f, longitude.to_f, stations.index(station_id)]
     points << point
   end
+  # A k-d tree for storing the data of weather stations and latitude/longitude
+  # allows for searching to find the nearest point
   kd = Kdtree.new(points)
   set :kd, kd
   set :stations, stations
@@ -44,11 +40,13 @@ class WeatherApp < Sinatra::Base
   end
 
   get '/:zip/city.json' do
+    # Zipcode can be used to find latitude and longitude - but not city name
     geolocation_url = "#{NWS_ENDPOINT}?listZipCodeList=#{params[:zip]}"
     doc = Nokogiri::XML(open(geolocation_url))
 
-    latitude, longitude = doc.xpath('//latlonlist').first.children.first.content.split(",")
+    latitude, longitude = doc.xpath('//latLonList').first.children.first.content.split(",")
 
+    # Ziptastic will return a city name for a zipcode
     results = Ziptastic.search(params[:zip])
 
     city = results.first
