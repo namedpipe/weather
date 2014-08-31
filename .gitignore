@@ -1,0 +1,17 @@
+*.sublime* *.swp
+*.tmproj
+.DS_Store
+.ackrc
+.bundle/
+.env.custom
+.idea/*
+.project
+.settings/*
+_ignore/
+coverage/*
+data/*
+data_test/*
+doc/*
+log/*
+nbproject/
+tmp/*
