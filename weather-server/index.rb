@@ -30,6 +30,7 @@ class WeatherApp < Sinatra::Base
   set :stations, stations
 
   before do
+    response.headers["Access-Control-Allow-Origin"] = "*"
     if request.request_method == 'OPTIONS'
       response.headers["Access-Control-Allow-Origin"] = "*"
       response.headers["Access-Control-Allow-Methods"] = "GET"
@@ -83,8 +84,8 @@ class WeatherApp < Sinatra::Base
   end
 
   get '/:lat/:long/forecast.json' do
-    start_date = Time.now.xmlschema
-    end_date = (Time.now + (2*24*60*60)).xmlschema
+    start_date = Time.now.xmlschema[0..-7]
+    end_date = (Time.now + (2*24*60*60)).xmlschema[0..-7]
     headers["Access-Control-Allow-Origin"] = "*"
     temp_forecast_url = "#{NWS_ENDPOINT}?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
     forecast_doc = Nokogiri::XML(open(temp_forecast_url))
