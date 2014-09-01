@@ -25,10 +25,10 @@ This is a simple [Sinatra](http://www.sinatrarb.com/) app designed to retrieve a
 
 ```
 bundle install;
-unicorn -c unicorn.rb -E production -D
+unicorn -c unicorn.rb -E production
 ```
 
-The server will now be running on port 4567 and you can test it via something like https://127.0.0.1:4567/ZIPCODE/city.json - where ZIPCODE is a US ZIPCODE.
+The server will now be running on port 4567 and you can test it via something like http://0.0.0.0:4567/ZIPCODE/city.json - where ZIPCODE is a US ZIPCODE.
 
 ## weather-web
 This is a [AngularJS](https://angularjs.org/), [Bootstrap](http://getbootstrap.com/), and [D3.js](http://d3js.org/) app designed to pull data from the weather-server and display a simple graph.
@@ -40,7 +40,7 @@ cd weather-web/app;
 python -mSimpleHTTPServer
 ```
 
-Now visit http://localhost:8080/
+Now visit http://0.0.0.0:8000/
 
 ## weather-app
 This is a [Cordova](http://cordova.apache.org/) (PhoneGap) app which wraps up the weather-web app to be used as an iOS app. It requires Xcode to compile it. You should be able to open the project file located in weather-app/platforms/ios/.
