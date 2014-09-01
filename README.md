@@ -3,6 +3,8 @@ weather
 
 This is a simplified weather app designed to show you the temperature and trends for your location. The goal is to have some clean to quickly assess the rate of temperature change.
 
+![Weather web screen](/screenshot.png?raw=true "Weather web")
+
 The app consists of three main parts:
 
 ## weather-server
