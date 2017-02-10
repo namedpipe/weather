@@ -61,7 +61,7 @@ class WeatherApp < Sinatra::Base
   get '/:lat/:long/station.json' do
     nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
     station = settings.stations[nearest]
-    current_obs_url = "http://weather.gov/xml/current_obs/#{station}.xml"
+    current_obs_url = "#{NWS_CURRENT_OBSERVATION}#{station}.xml"
     content_type :json
     {station: station, current_observation_xml: current_obs_url}.to_json
   end
@@ -69,7 +69,7 @@ class WeatherApp < Sinatra::Base
   get '/:lat/:long/current.json' do
     nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
     station = settings.stations[nearest]
-    current_obs_url = "http://weather.gov/xml/current_obs/#{station}.xml"
+    current_obs_url = "#{NWS_CURRENT_OBSERVATION}/#{station}.xml"
     doc = Nokogiri::XML(open(current_obs_url))
     temp = doc.xpath('//temp_f').first.content
     content_type :json
