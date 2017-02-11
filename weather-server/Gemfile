@@ -6,5 +6,6 @@ gem 'nokogiri'
 gem 'redis'
 gem 'ziptastic'
 gem 'kdtree'
+gem 'timezone'
 
 gem 'unicorn'

@@ -4,6 +4,7 @@
 require 'open-uri'
 require 'date'
 require 'time'
+require 'timezone'
 
 set :bind, '0.0.0.0'
 
@@ -28,6 +29,9 @@ class WeatherApp < Sinatra::Base
   kd = Kdtree.new(points)
   set :kd, kd
   set :stations, stations
+  Timezone::Lookup.config(:google) do |c|
+    c.api_key = 'AIzaSyD-E3BgzwakcPnyVfsroPqsSZ7-bNE00s8'
+  end
 
   before do
     response.headers["Access-Control-Allow-Origin"] = "*"
@@ -84,8 +88,10 @@ class WeatherApp < Sinatra::Base
   end
 
   get '/:lat/:long/forecast.json' do
-    start_date = Time.now.xmlschema[0..-7]
-    end_date = (Time.now + (2*24*60*60)).xmlschema[0..-7]
+    timezone = Timezone.lookup(params[:lat].to_f, params[:long].to_f)
+
+    start_date = timezone.utc_to_local(Time.now).xmlschema[0..-5]
+    end_date = timezone.utc_to_local(Time.now + (2*24*60*60)).xmlschema[0..-5]
     headers["Access-Control-Allow-Origin"] = "*"
     temp_forecast_url = "#{NWS_ENDPOINT}?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
     forecast_doc = Nokogiri::XML(open(temp_forecast_url))
