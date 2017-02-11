@@ -114,7 +114,7 @@ class WeatherApp < Sinatra::Base
     end
 
     temps = []
-    temps << [Time.now.strftime("%Y-%m-%dT%H:%M:%S"), current_temp.to_i]
+    temps << [timezone.utc_to_local(Time.now).strftime("%Y-%m-%dT%H:%M:%S"), current_temp.to_i]
     i = 0
     forecast_doc.xpath('//data/parameters/temperature').children.each do |temp_element|
       if temp_element.name == "value"
