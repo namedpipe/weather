@@ -50,6 +50,10 @@ h6 {
   font-family: 'Raleway', sans-serif;
   font-weight: normal;
 }
+#container {
+  max-width: 700px;
+  margin: 0 auto;
+}
 #current-temp {
   padding-bottom: 20px;
   padding-left: 10px;
@@ -114,6 +118,17 @@ rect {
 .grid path {
   display: none;
 }
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
 
 @media (max-width: 480px) {
   .hero-unit {

@@ -42,8 +42,7 @@ directivesModule.directive('weatherGraph', function () {
       var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.temperature); })
-        .interpolate("bundle")
-        .tension(0.9);
+        .interpolate("cardinal");
 
       var svg = d3.select(element[0]).append("svg")
         .attr("preserveAspectRatio", "xMidYMin")
@@ -65,6 +64,7 @@ directivesModule.directive('weatherGraph', function () {
         if (!newVal) {
           return;
         }
+        var bisectDate = d3.bisector(function(d) { return d.date; }).left;
         var data = newVal.map(function(d) {
           return {
             date: parseDate(d[0]),
@@ -98,6 +98,36 @@ directivesModule.directive('weatherGraph', function () {
           .datum(data)
           .attr("class", "line")
           .attr("d", line);
+
+        var focus = svg.append("g")
+              .attr("class", "focus")
+              .style("display", "none");
+
+        focus.append("circle")
+            .attr("r", 4.5);
+
+        focus.append("text")
+            .attr("x", 9)
+            .attr("dy", ".35em");
+
+        svg.append("rect")
+            .attr("class", "overlay")
+            .attr("width", 660)
+            .attr("height", 500)
+            .on("mouseover", function() { focus.style("display", null); })
+            .on("mouseout", function() { focus.style("display", "none"); })
+            .on("mousemove", mousemove);
+
+        function mousemove() {
+          var x0 = x.invert(d3.mouse(this)[0]),
+              i = bisectDate(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+          focus.attr("transform", "translate(" + x(d.date) + "," + y(d.temperature) + ")");
+          focus.select("text").text(d.temperature + ' - ' + d.date);
+        }
+
       });
     }
   }

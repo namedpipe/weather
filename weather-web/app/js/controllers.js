@@ -17,6 +17,15 @@ function HomeController($scope, $http, city, lat, lon, server){
       $scope.gotdata = "false";
     });
 
+  // $scope.dataStatusFunction = function($scope, $interval) {
+  //   var c=0;
+  //   $scope.dataStatus="This DIV is refreshed "+c+" time.";
+  //   $interval(function(){
+  //     $scope.dataStatus="This DIV is refreshed "+c+" time.";
+  //     c++;
+  //   },1000);
+  // };
+
   $scope.formData = {};
   $scope.zip = /^\d\d\d\d\d$/;
   $scope.cityName = city;

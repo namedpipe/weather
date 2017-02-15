@@ -17,7 +17,17 @@ weatherApp.config(function ($httpProvider) {
     return data;
   };
 
+  var sliderFunction = function sliderFunction(data, headersGetter) {
+    $('#ex1').slider({
+      formatter: function(value) {
+        return 'Current value: ' + value;
+      }
+    });
+    return data;
+  };
+
   $httpProvider.defaults.transformRequest.push(spinnerFunction);
+  $httpProvider.defaults.transformRequest.push(sliderFunction);
 });
 
 weatherApp.factory('loadingInterceptor', function ($q, $window) {
