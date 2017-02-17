@@ -89,19 +89,20 @@ class WeatherApp < Sinatra::Base
 
   get '/:lat/:long/forecast.json' do
     timezone = Timezone.lookup(params[:lat].to_f, params[:long].to_f)
+    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
+    station = settings.stations[nearest]
 
     start_date = timezone.utc_to_local(Time.now).xmlschema[0..-5]
     end_date = timezone.utc_to_local(Time.now + (2*24*60*60)).xmlschema[0..-5]
-    headers["Access-Control-Allow-Origin"] = "*"
+    
     temp_forecast_url = "#{NWS_ENDPOINT}?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
+    current_obs_url = "#{NWS_CURRENT_OBSERVATION}/#{station}.xml"
+
     forecast_doc = Nokogiri::XML(open(temp_forecast_url))
     location = forecast_doc.xpath('//data/location/point')
     lat = location.attribute("latitude").value
     long = location.attribute("longitude").value
 
-    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
-    station = settings.stations[nearest]
-    current_obs_url = "http://weather.gov/xml/current_obs/#{station}.xml"
     current_obs_doc = Nokogiri::XML(open(current_obs_url))
     current_temp = current_obs_doc.xpath('//temp_f').first.content
 
