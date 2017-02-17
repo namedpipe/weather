@@ -15,5 +15,5 @@ listen 4567, :backlog => 64
 pid "tmp/pids/unicorn.pid"
 
 # Set log file paths
-#stderr_path "#{@dir}log/unicorn.stderr.log"
+stderr_path "#{@dir}log/unicorn.stderr.log"
 stdout_path "#{@dir}log/unicorn.stdout.log"

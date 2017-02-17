@@ -9,7 +9,7 @@ require 'timezone'
 set :bind, '0.0.0.0'
 
 class WeatherApp < Sinatra::Base
-  NWS_ENDPOINT = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php"
+  NWS_ENDPOINT = "https://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php"
   NWS_STATION_LIST = "http://w1.weather.gov/xml/current_obs/index.xml"
   NWS_CURRENT_OBSERVATION = "http://w1.weather.gov/xml/current_obs/"
 
