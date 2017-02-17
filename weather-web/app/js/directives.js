@@ -61,7 +61,7 @@ directivesModule.directive('weatherGraph', function () {
 
       scope.$watch('val', function (newVal, oldVal) {
         svg.selectAll('*').remove();
-        if (!newVal) {
+        if ( !newVal || !(Array.isArray(newVal)) ) {
           return;
         }
         var bisectDate = d3.bisector(function(d) { return d.date; }).left;

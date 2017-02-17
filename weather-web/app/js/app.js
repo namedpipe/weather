@@ -2,7 +2,7 @@
 
 
 // Declare app level module which depends on filters, and services
-var weatherApp = angular.module('weatherApp', ['weatherApp.filters', 'weatherApp.services', 'weatherApp.directives']).
+var weatherApp = angular.module('weatherApp', ['ngRoute', 'weatherApp.filters', 'weatherApp.services', 'weatherApp.directives']).
   config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home', {templateUrl: 'partials/home.html', controller: HomeController});
     $routeProvider.otherwise({redirectTo: '/home'});
@@ -10,7 +10,7 @@ var weatherApp = angular.module('weatherApp', ['weatherApp.filters', 'weatherApp
 
 
 weatherApp.config(function ($httpProvider) {
-  $httpProvider.responseInterceptors.push('loadingInterceptor');
+  $httpProvider.interceptors.push('loadingInterceptor');
 
   var spinnerFunction = function spinnerFunction(data, headersGetter) {
     $('#set-location').toggleClass('active');

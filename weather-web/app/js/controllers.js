@@ -2,29 +2,32 @@
 
 /* Controllers */
 
-function HomeController($scope, $http, city, lat, lon, server){
+function HomeController($scope, $http, $interval, city, lat, lon, server){
+  var refreshDate = new Date();
 	$http(
     {method: 'GET',
     url: server + '/' + lat + '/' + lon + '/forecast.json'}).
-    success(function(data, status, headers, config) {
-    	$scope.weatherData = data;
-      var d = new Date();
-      $scope.dataStatus = "Refreshed " + moment(d).fromNow();
-      $scope.gotdata = "true";
-    }).
-    error(function(data, status, headers, config) {
-      $scope.dataStatus = "Problem accessing the weather data";
-      $scope.gotdata = "false";
-    });
+    then(
+      function(data, status, headers, config) {
+      	$scope.weatherData = data.data;
+        $scope.dataStatus = "Refreshed " + moment(refreshDate).fromNow();
+        $scope.gotdata = "true";
+      }, 
+      function(data, status, headers, config) {
+        $scope.dataStatus = "Problem accessing the weather data";
+        $scope.gotdata = "false";
+      });
 
-  // $scope.dataStatusFunction = function($scope, $interval) {
-  //   var c=0;
-  //   $scope.dataStatus="This DIV is refreshed "+c+" time.";
-  //   $interval(function(){
-  //     $scope.dataStatus="This DIV is refreshed "+c+" time.";
-  //     c++;
-  //   },1000);
-  // };
+  $scope.dataStatusFunction = function() {
+    var c=0;
+    $scope.dataStatus = "Refreshed " + moment(refreshDate).fromNow();
+    $interval(function(){
+      $scope.dataStatus = "Refreshed " + moment(refreshDate).fromNow();
+      c++;
+    }, 10000);
+  };
+
+  $scope.dataStatusFunction();
 
   $scope.formData = {};
   $scope.zip = /^\d\d\d\d\d$/;
@@ -34,12 +37,8 @@ function HomeController($scope, $http, city, lat, lon, server){
   $http({
         method  : 'GET',
         url     : server + '/' + $scope.formData.zip + '/city.json'
-    })
-        .error(function(data) {
-          $scope.dataStatus = "Problem accessing the weather data";
-          $scope.gotdata = "false";
-        })
-        .success(function(data) {
+    }).then(
+        function(data) {
           $("#selectcity").modal("hide");
           $scope.gotdata = "true";
             lat =  data.latitude;
@@ -60,8 +59,13 @@ function HomeController($scope, $http, city, lat, lon, server){
                     $scope.gotdata = "false";
                   });
 
-        });
+        },
+        function(data) {
+          $scope.dataStatus = "Problem accessing the weather data";
+          $scope.gotdata = "false";
+        }
+      );
   };
 };
-HomeController.$inject = ['$scope', '$http', 'city', 'lat', 'lon', 'server'];
+HomeController.$inject = ['$scope', '$http', '$interval', 'city', 'lat', 'lon', 'server'];
 
