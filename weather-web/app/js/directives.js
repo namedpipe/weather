@@ -125,7 +125,7 @@ directivesModule.directive('weatherGraph', function () {
               d1 = data[i],
               d = x0 - d0.date > d1.date - x0 ? d1 : d0;
           focus.attr("transform", "translate(" + x(d.date) + "," + y(d.temperature) + ")");
-          focus.select("text").text(d.temperature + ' - ' + d.date);
+          focus.select("text").html(d.temperature + " - " + moment(d.date).calendar());
         }
 
       });
