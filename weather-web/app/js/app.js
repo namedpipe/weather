@@ -13,7 +13,7 @@ weatherApp.config(function ($httpProvider) {
   $httpProvider.interceptors.push('loadingInterceptor');
 
   var spinnerFunction = function spinnerFunction(data, headersGetter) {
-    $('#set-location').toggleClass('active');
+    //$('#set-location').toggleClass('active');
     return data;
   };
 
@@ -27,16 +27,15 @@ weatherApp.config(function ($httpProvider) {
   };
 
   $httpProvider.defaults.transformRequest.push(spinnerFunction);
-  $httpProvider.defaults.transformRequest.push(sliderFunction);
 });
 
 weatherApp.factory('loadingInterceptor', function ($q, $window) {
   return function (promise) {
     return promise.then(function (response) {
-      $('#set-location').toggleClass('active');
+      //$('#set-location').toggleClass('active');
       return response;
     }, function (response) {
-      $('#set-location').toggleClass('active');
+      //$('#set-location').toggleClass('active');
       return $q.reject(response);
     });
   };

@@ -41,20 +41,20 @@ function HomeController($scope, $http, $interval, city, lat, lon, server){
         function(data) {
           $("#selectcity").modal("hide");
           $scope.gotdata = "true";
-            lat =  data.latitude;
-            lon = data.longitude;
+            lat = data.data.latitude;
+            lon = data.data.longitude;
             var forecastURL = server + '/' + lat + '/' + lon + '/forecast.json';
-            $scope.cityName = data.city;
+            $scope.cityName = data.data.city;
               $http(
               {method: 'GET',
-                url: forecastURL}).
-                  success(function(data, status, headers, config) {
-                    $scope.weatherData = data;
+                url: forecastURL}).then(
+                  function(data, status, headers, config) {
+                    $scope.weatherData = data.data;
                     var d = new Date();
                     $scope.dataStatus = "Refreshed " + d;
                     $scope.gotdata = "true";
-                  }).
-                  error(function(data, status, headers, config) {
+                  },
+                  function(data, status, headers, config) {
                     $scope.dataStatus = "Problem accessing the weather data";
                     $scope.gotdata = "false";
                   });
