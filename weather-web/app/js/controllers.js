@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function HomeController($scope, $http, $interval, city, lat, lon, server){
+function HomeController($scope, $http, $interval, city, lat, lon, server, $cookies){
   var refreshDate = new Date();
 	$http(
     {method: 'GET',
@@ -27,6 +27,9 @@ function HomeController($scope, $http, $interval, city, lat, lon, server){
     }, 10000);
   };
 
+  //$cookies.put('lat', lat);
+  //$cookies.put('lon', lon);
+
   $scope.dataStatusFunction();
 
   $scope.formData = {};
@@ -45,6 +48,8 @@ function HomeController($scope, $http, $interval, city, lat, lon, server){
             lon = data.data.longitude;
             var forecastURL = server + '/' + lat + '/' + lon + '/forecast.json';
             $scope.cityName = data.data.city;
+            city = data.data.city;
+
               $http(
               {method: 'GET',
                 url: forecastURL}).then(
@@ -67,5 +72,5 @@ function HomeController($scope, $http, $interval, city, lat, lon, server){
       );
   };
 };
-HomeController.$inject = ['$scope', '$http', '$interval', 'city', 'lat', 'lon', 'server'];
+HomeController.$inject = ['$scope', '$http', '$interval', 'city', 'lat', 'lon', 'server', '$cookies'];
 
