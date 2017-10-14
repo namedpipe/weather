@@ -44,47 +44,55 @@ class WeatherApp < Sinatra::Base
     end
   end
 
-  get '/:zip/city.json' do
+  def city_for_zip(zip)
     # Zipcode can be used to find latitude and longitude - but not city name
-    geolocation_url = "#{NWS_ENDPOINT}?listZipCodeList=#{params[:zip]}"
+    geolocation_url = "#{NWS_ENDPOINT}?listZipCodeList=#{zip}"
     doc = Nokogiri::XML(open(geolocation_url))
 
     latitude, longitude = doc.xpath('//latLonList').first.children.first.content.split(",")
 
     # Ziptastic will return a city name for a zipcode
-    results = Ziptastic.search(params[:zip])
+    results = Ziptastic.search(zip)
 
     city = results.first
     city[:longitude] = longitude
     city[:latitude] = latitude
+    city
+  end
+
+  get '/:zip/city.json' do
+    city = city_for_zip params[:zip]
 
     content_type :json
     city.to_json
   end
 
-  get '/:lat/:long/station.json' do
-    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
-    station = settings.stations[nearest]
-    current_obs_url = "#{NWS_CURRENT_OBSERVATION}#{station}.xml"
+  get '/city/:zip' do
+    city = city_for_zip params[:zip]
+
     content_type :json
-    {station: station, current_observation_xml: current_obs_url}.to_json
+    city.to_json
   end
 
-  get '/:lat/:long/current.json' do
-    nearest = settings.kd.nearest params[:lat].to_f, params[:long].to_f
+  def current_temp(lat, long)
+    nearest = settings.kd.nearest lat.to_f, long.to_f
     station = settings.stations[nearest]
     current_obs_url = "#{NWS_CURRENT_OBSERVATION}/#{station}.xml"
     doc = Nokogiri::XML(open(current_obs_url))
     temp = doc.xpath('//temp_f').first.content
-    content_type :json
-    {station: station, current_temperature_f: temp}.to_json
+    {station: station, current_temperature_f: temp}
   end
 
-  get '/:lat/:long/test' do
-    start_date = Time.now.xmlschema
-    end_date = (Time.now + (2*24*60*60)).xmlschema
-    temp_forecast_url = "#{NWS_ENDPOINT}?lat=#{params[:lat]}&lon=#{params[:long]}&product=time-series&begin=#{start_date}&end=#{end_date}&temp=temp"
-    temp_forecast_url
+  get 'current_temp/:lat/:long' do
+    current_temp = current_temp(params[:lat], params[:long])
+    content_type :json
+    current_temp.to_json
+  end
+
+  get '/:lat/:long/current.json' do
+    current_temp = current_temp(params[:lat], params[:long])
+    content_type :json
+    current_temp.to_json
   end
 
   get '/:lat/:long/forecast.json' do
