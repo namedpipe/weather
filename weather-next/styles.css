@@ -1,0 +1,242 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  padding-top: 20px;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: 'Raleway', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: normal;
+}
+#container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+#current-temp {
+  padding-top: 0px;
+  margin-top: 0;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  font-weight: bold;
+  font-size: 4.6em;
+}
+#city {
+  color: #676767;
+  padding-top: 10px;
+}
+#current-temp #temp-units{
+  font-size: 0.6em;
+  color: #939393;
+  /*vertical-align: text-top;*/
+/*  margin-top: 5px;
+*/}
+.hero-unit {
+  border-radius: 0;
+  box-shadow: 0px 3px 3px #acacac;
+  -webkit-box-shadow: 0px 3px 3px #acacac;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding: 20px;
+  padding-bottom: 0;
+}
+
+svg {display: block; width: 99%; margin: 0 auto; max-height: 500px; height:600px;}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 4.5px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis text {
+  font-size: 1.1em;
+}
+
+rect {
+  fill: #ddd;
+}
+
+.grid line {
+  stroke: #fff;
+}
+
+.grid line.minor {
+  stroke-width: .5px;
+}
+
+.grid text {
+  display: none;
+}
+
+.axis line {
+  stroke: #000;
+}
+
+.grid path {
+  display: none;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+.focus {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  display: block;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.focus:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+
+@media (max-width: 480px) {
+  .hero-unit {
+    padding: 5px;
+  }
+  svg {
+    height: 250px;
+  }
+}
+
+.spinner {
+  display: inline-block;
+  opacity: 0;
+  width: 0;
+
+  -webkit-transition: opacity 0.25s, width 0.25s;
+  -moz-transition: opacity 0.25s, width 0.25s;
+  -o-transition: opacity 0.25s, width 0.25s;
+  transition: opacity 0.25s, width 0.25s;
+}
+
+.has-spinner.active {
+  cursor:progress;
+}
+
+.has-spinner.active .spinner {
+  opacity: 1;
+  width: auto; /* This doesn't work, just fix for unkown width elements */
+}
+
+.has-spinner.btn-mini.active .spinner {
+    width: 10px;
+}
+
+.has-spinner.btn-small.active .spinner {
+    width: 13px;
+}
+
+.has-spinner.btn.active .spinner {
+    width: 16px;
+}
+
+.has-spinner.btn-large.active .spinner {
+    width: 19px;
+}
+
+.spin{
+   -webkit-transform-origin: 50% 58%;
+   transform-origin:50% 58%;
+   -ms-transform-origin:50% 58%; /* IE 9 */
+   -webkit-animation: spin .2s infinite linear;
+   -moz-animation: spin .2s infinite linear;
+   -o-animation: spin .2s infinite linear;
+   animation: spin .2s infinite linear;
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
